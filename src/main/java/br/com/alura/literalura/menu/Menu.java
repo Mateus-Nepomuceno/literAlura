@@ -4,10 +4,9 @@ import br.com.alura.literalura.model.Autor;
 import br.com.alura.literalura.model.DadosLivro;
 import br.com.alura.literalura.model.DadosResultados;
 import br.com.alura.literalura.model.Livro;
+import br.com.alura.literalura.repository.AutorRepository;
 import br.com.alura.literalura.service.ConsumoApi;
 import br.com.alura.literalura.service.ConverteDados;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -16,7 +15,12 @@ public class Menu {
     private ConsumoApi consumo = new ConsumoApi();
     private ConverteDados converte = new ConverteDados();
     private final String URL_BASE = "https://gutendex.com/books/";
+    private AutorRepository repositorio;
     private String json;
+
+    public Menu(AutorRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     private void mostrarMenu(){
         System.out.println("""
@@ -38,14 +42,21 @@ public class Menu {
         int opcao = -1;
         while (opcao != 0) {
             mostrarMenu();
-            opcao = Integer.parseInt(this.sc.nextLine());
-            switch (opcao) {
-                case 1:
-                    buscarLivroPorTitulo();
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-                    break;
+            try {
+                opcao = Integer.parseInt(this.sc.nextLine());
+                switch (opcao) {
+                    case 0:
+                        System.out.println("Saindo...");
+                        break;
+                    case 1:
+                        buscarLivroPorTitulo();
+                        break;
+                    default:
+                        System.out.println("Opção inválida.");
+                        break;
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Digite apenas números.");
             }
         }
     }
@@ -61,6 +72,7 @@ public class Menu {
             Autor autor = new Autor(livroEncontrado.autores().get(0));
             autor.setLivros(livro);
             System.out.println(livro);
+            repositorio.save(autor);
         } else {
             System.out.println("Livro não encontrado.");
         }

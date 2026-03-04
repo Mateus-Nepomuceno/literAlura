@@ -1,7 +1,16 @@
 package br.com.alura.literalura.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "livros")
 public class Livro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true)
     private String titulo;
+    @ManyToOne
     private Autor autor;
     private String idioma;
     private Integer downloads;
@@ -13,6 +22,14 @@ public class Livro {
         this.titulo = livro.titulo();
         this.idioma = livro.idiomas().get(0);
         this.downloads = livro.downloads();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -49,10 +66,10 @@ public class Livro {
 
     @Override
     public String toString() {
-        return  "============== Livro =============" +
+        return  "\n============== Livro =============" +
                 "\nTítulo: " + titulo +
                 "\nAutor: " + autor.getNome() +
                 "\nIdioma: " + idioma +
-                "\nDownloads: " + downloads;
+                "\nDownloads: " + downloads+"\n";
     }
 }
