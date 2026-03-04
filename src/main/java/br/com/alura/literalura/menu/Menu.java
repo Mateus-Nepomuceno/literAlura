@@ -60,6 +60,12 @@ public class Menu {
                     case 3:
                         listarAutores();
                         break;
+                    case 4:
+                        listarAutoresVivosPorAno();
+                        break;
+                    case 5:
+                        listarLivrosPorIdioma();
+                        break;
                     default:
                         System.out.println("Opção inválida.");
                         break;
@@ -101,6 +107,17 @@ public class Menu {
 
     private void listarAutores() {
         List<Autor> autores = repositorio.buscarAutores();
+        printarAutores(autores);
+    }
+
+    private void listarAutoresVivosPorAno(){
+        System.out.println("Digite o ano que deseja pesquisar: ");
+        var ano = Integer.parseInt(this.sc.nextLine());
+        List<Autor> autoresVivos = repositorio.buscarAutoresVivosPorAno(ano);
+        printarAutores(autoresVivos);
+    }
+
+    private void printarAutores(List<Autor> autores){
         autores.forEach(a -> {
             String nomesDosLivros = a.getLivros().stream()
                     .map(Livro::getTitulo)
@@ -108,5 +125,19 @@ public class Menu {
 
             System.out.println(a + "Livros [" + nomesDosLivros + "]\n");
         });
+    }
+
+    private void listarLivrosPorIdioma(){
+        System.out.println("""
+                ===================
+                | es - Espanhol   |
+                | en - Inglês     |
+                | fr - Francês    |
+                | pt - Português  |
+                ===================""");
+        System.out.println("Digite a sigla do idioma que deseja: ");
+        var idioma = this.sc.nextLine();
+        List<Livro> livrosIdioma = repositorio.buscarLivrosPorIdioma(idioma);
+        livrosIdioma.forEach(System.out::println);
     }
 }

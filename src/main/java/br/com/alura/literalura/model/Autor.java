@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 
 @Entity
 @Table(name = "autores")
@@ -22,16 +23,8 @@ public class Autor {
 
     public Autor(DadosAutor autor) {
         this.nome = autor.nome();
-        try {
-            this.anoNascimento = Integer.valueOf(autor.anoNascimento());
-        } catch (NumberFormatException e) {
-            this.anoNascimento = 0;
-        }
-        try {
-            this.anoFalecimento = Integer.valueOf(autor.anoFalecimento());
-        } catch (NumberFormatException e) {
-            this.anoNascimento = 0;
-        }
+        this.anoNascimento = OptionalInt.of(Integer.parseInt(autor.anoNascimento())).orElse(0);
+        this.anoFalecimento = OptionalInt.of(Integer.parseInt(autor.anoFalecimento())).orElse(0);
     }
 
     public Long getId() {
