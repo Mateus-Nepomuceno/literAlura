@@ -66,10 +66,10 @@ public class Livro {
 
     @Override
     public String toString() {
-        return  "\n============== Livro =============" +
+        return  "============== Livro =============" +
                 "\nTítulo: " + titulo +
                 "\nAutor: " + autor.getNome() +
                 "\nIdioma: " + idioma +
-                "\nDownloads: " + downloads+"\n";
+                "\nDownloads: " + downloads + "\n";
     }
 }

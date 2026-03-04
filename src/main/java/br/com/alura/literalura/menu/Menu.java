@@ -7,8 +7,11 @@ import br.com.alura.literalura.model.Livro;
 import br.com.alura.literalura.repository.AutorRepository;
 import br.com.alura.literalura.service.ConsumoApi;
 import br.com.alura.literalura.service.ConverteDados;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Menu {
     private Scanner sc = new Scanner(System.in);
@@ -22,7 +25,7 @@ public class Menu {
         this.repositorio = repositorio;
     }
 
-    private void mostrarMenu(){
+    private void mostrarMenu() {
         System.out.println("""
                 ================================================
                 |                 LiterAlura                   |
@@ -51,11 +54,17 @@ public class Menu {
                     case 1:
                         buscarLivroPorTitulo();
                         break;
+                    case 2:
+                        listarLivros();
+                        break;
+                    case 3:
+                        listarAutores();
+                        break;
                     default:
                         System.out.println("Opção inválida.");
                         break;
                 }
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println("Digite apenas números.");
             }
         }
@@ -64,9 +73,9 @@ public class Menu {
     private void buscarLivroPorTitulo() {
         System.out.print("Digite o título do livro: ");
         String titulo = this.sc.nextLine();
-        this.json = consumo.obterDados(URL_BASE+"?search="+titulo.replace(" ","+"));
+        this.json = consumo.obterDados(URL_BASE + "?search=" + titulo.replace(" ", "+"));
         Optional<DadosLivro> livroBuscado = pegaDadosLivro(titulo);
-        if (livroBuscado.isPresent()){
+        if (livroBuscado.isPresent()) {
             DadosLivro livroEncontrado = livroBuscado.get();
             Livro livro = new Livro(livroEncontrado);
             Autor autor = new Autor(livroEncontrado.autores().get(0));
@@ -83,5 +92,21 @@ public class Menu {
         return resultados.livros().stream()
                 .filter(l -> l.titulo().toLowerCase().contains(titulo.toLowerCase()))
                 .findFirst();
+    }
+
+    private void listarLivros() {
+        List<Livro> livros = repositorio.buscarLivros();
+        livros.forEach(System.out::println);
+    }
+
+    private void listarAutores() {
+        List<Autor> autores = repositorio.buscarAutores();
+        autores.forEach(a -> {
+            String nomesDosLivros = a.getLivros().stream()
+                    .map(Livro::getTitulo)
+                    .collect(Collectors.joining(", "));
+
+            System.out.println(a + "Livros [" + nomesDosLivros + "]\n");
+        });
     }
 }
