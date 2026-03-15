@@ -1,6 +1,6 @@
 # 📚 LiterAlura
 
-Aplicação de linha de comando (CLI) para buscar, catalogar e gerenciar livros e autores. O sistema consome a [API Gutendex](https://gutendex.com/) para buscar obras literárias e armazena as informações em um banco de dados PostgreSQL.
+Aplicação de linha de comando (CLI) desenvolvida para buscar, catalogar e gerenciar livros e autores. O sistema consome a [API Gutendex](https://gutendex.com/) para buscar obras literárias e armazena as informações em um banco de dados PostgreSQL.
 
 ## Tecnologias Utilizadas
 
